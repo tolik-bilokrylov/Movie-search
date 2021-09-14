@@ -1,0 +1,87 @@
+body{
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.container header {
+  background-color: #222;
+  height: 50px;
+  box-sizing: border-box;
+  padding: 10px;
+  display: flex;
+}
+
+.container header input {
+  flex: 1;
+  border: 0;
+  background-color: rgba(255, 255, 255, 0.2);
+  padding: 3px 10px;
+  color: #fff;
+  font-size: 1.5em
+}
+
+.container header + ul {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+}
+
+.container header + ul li {
+  flex: 0.33
+}
+
+.container header + ul li .overview {
+  padding: 40px;
+}
+
+#info:not([hidden]) {
+  font-size: 40px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#spinner:not([hidden]) {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#spinner::after {
+  content: "";
+  width: 100px;
+  height: 100px;
+  border: 3px solid #f3f3f3;
+  border-top: 4px solid #f25a41;
+  border-radius: 100%;
+  will-change: transform;
+  animation: spin 1s infinite linear
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
