@@ -8,9 +8,41 @@ const spinner = document.getElementById("spinner");
 const info = document.getElementById("info");
 const main = document.getElementById('main');
 
+let debouncedOnInput = debounce(onInput);
+document.querySelector('input').addEventListener('input', debouncedOnInput);
+const search = document.querySelector('input').addEventListener('input', debouncedOnInput);
+function debounce(callback) {
+  let timeout;
+  return function(argument) {
+    clearTimeout(timeout);
+    timeout = setTimeout(callback, 1500, argument);
+  }
+};
+
+const cachedFetch = async (url, options) => {
+  let cacheKey = url
+  let cached = sessionStorage.getItem(cacheKey)
+  if (cached !== null) {
+    let response = new Response(new Blob([cached]))
+    return Promise.resolve(response)
+  }
+
+  const responseNext = await fetch(url, options);
+
+  if (responseNext.status === 200) {
+    let ct = responseNext.headers.get('Content-Type');
+    if (ct && (ct.match(/application\/json/i) || ct.match(/text\//i))) {
+      responseNext.clone().text().then(content => {
+        sessionStorage.setItem(cacheKey, content);
+      });
+    }
+  }
+  return responseNext;
+}
+
 function getMovies(url) {
   spinner.removeAttribute('hidden');
-  fetch(url)
+  cachedFetch(url)
     .then(response => response.json())
     .then(data => {
       spinner.setAttribute('hidden', '');
@@ -19,22 +51,9 @@ function getMovies(url) {
       if (data.results.length === 0) {
         info.removeAttribute('hidden');
       } else {
-        info.setAttribute('hidden', 'hidden');
+        info.setAttribute('hidden', '');
       }
-    }
-    )
-};
-
-let debouncedOnInput = debounce(onInput);
-document.querySelector('input').addEventListener('input', debouncedOnInput);
-const search = document.querySelector('input').addEventListener('input', debouncedOnInput);
-
-function debounce(callback) {
-  let timeout;
-  return function(argument) {
-    clearTimeout(timeout);
-    timeout = setTimeout(callback, 1000, argument);
-  }
+    })
 };
 
 getMovies(API_URL);
