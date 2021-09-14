@@ -38,7 +38,7 @@ const cachedFetch = async (url, options) => {
     }
   }
   return responseNext;
-}
+};
 
 function getMovies(url) {
   spinner.removeAttribute('hidden');
