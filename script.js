@@ -15,8 +15,11 @@ function getMovies(url) {
     .then(data => {
       spinner.setAttribute('hidden', '');
       showMovies(data.results);
+
       if (data.results.length === 0) {
         info.removeAttribute('hidden');
+      } else {
+        info.setAttribute('hidden', 'hidden');
       }
     }
     )
